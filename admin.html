@@ -1,0 +1,1046 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bhagwati Admin Panel</title>
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f4f7fc;
+            display: flex;
+        }
+
+        /* Sidebar */
+
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            background: #111827;
+            color: white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .menu {
+            list-style: none;
+        }
+
+        .menu li {
+            margin-bottom: 12px;
+        }
+
+        .menu li a {
+            text-decoration: none;
+            color: #d1d5db;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        .menu li a:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        /* Main */
+
+        .main {
+            margin-left: 260px;
+            width: calc(100% - 260px);
+            padding: 25px;
+        }
+
+        /* Topbar */
+
+        .topbar {
+            background: white;
+            padding: 18px 25px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .topbar h2 {
+            color: #111827;
+        }
+
+        .admin {
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        /* Cards */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .card h3 {
+            color: #6b7280;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .card h1 {
+            color: #111827;
+            font-size: 32px;
+        }
+
+        /* Sections */
+
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .section h2 {
+            margin-bottom: 20px;
+            color: #111827;
+        }
+
+        /* Form */
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #374151;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* Table */
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th,
+        table td {
+            padding: 14px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+        }
+
+        table th {
+            background: #f3f4f6;
+        }
+
+        .action-btn {
+            border: none;
+            padding: 7px 12px;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .edit {
+            background: #f59e0b;
+        }
+
+        .delete {
+            background: #ef4444;
+        }
+
+        /* Mobile */
+
+        @media(max-width:768px) {
+
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+
+    <div class="sidebar">
+
+        <div class="logo">
+            Bhagwati Admin
+        </div>
+
+        <ul class="menu">
+
+            <li>
+                <a href="#">
+                    <i class="fa fa-home"></i>
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="#category">
+                    <i class="fa fa-list"></i>
+                    Add Category
+                </a>
+            </li>
+
+            <li>
+                <a href="#subcategory">
+                    <i class="fa fa-layer-group"></i>
+                    Add Sub Category
+                </a>
+            </li>
+
+            <li>
+                <a href="#product">
+                    <i class="fa fa-box"></i>
+                    Add Product
+                </a>
+            </li>
+
+            <li>
+                <a href="#">
+                    <i class="fa fa-shopping-cart"></i>
+                    Orders
+                </a>
+            </li>
+
+            <li>
+                <a href="#">
+                    <i class="fa fa-users"></i>
+                    Customers
+                </a>
+            </li>
+
+            <li>
+                <a href="#">
+                    <i class="fa fa-cog"></i>
+                    Settings
+                </a>
+            </li>
+
+        </ul>
+
+    </div>
+
+    <!-- Main -->
+
+    <div class="main">
+
+        <!-- Topbar -->
+
+        <div class="topbar">
+            <h2>Dashboard</h2>
+
+            <div class="admin">
+                Welcome Admin
+            </div>
+        </div>
+
+        <!-- Dashboard Cards -->
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>Total Products</h3>
+                <h1>120</h1>
+            </div>
+
+            <div class="card">
+                <h3>Total Categories</h3>
+                <h1>15</h1>
+            </div>
+
+            <div class="card">
+                <h3>Total Orders</h3>
+                <h1>45</h1>
+            </div>
+
+            <div class="card">
+                <h3>Total Customers</h3>
+                <h1>220</h1>
+            </div>
+
+        </div>
+
+        <!-- Add Category -->
+
+        <div class="section" id="category">
+
+            <h2>Add Category</h2>
+
+            <form id="categoryForm">
+
+                <div class="form-group">
+                    <label>Category Name</label>
+
+                    <input type="text"
+                        id="categoryName"
+                        placeholder="Enter Category Name" />
+                </div>
+
+                <button type="submit" class="btn">
+                    Add Category
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- Add Sub Category -->
+
+        <div class="section" id="subcategory">
+
+            <h2>Add Sub Category</h2>
+
+            <form id="subcategoryForm">
+
+                <div class="form-group">
+
+                    <label>Select Category</label>
+
+                    <select id="subcategoryCategory">
+                        <option>Loading Categories...</option>
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Sub Category Name</label>
+
+                    <input type="text"
+                        id="subcategoryName"
+                        placeholder="Enter Sub Category Name" />
+
+                </div>
+
+                <button type="submit" class="btn">
+                    Add Sub Category
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- Add Product -->
+
+        <div class="section" id="product">
+
+            <h2>Add Product</h2>
+
+            <form id="productForm">
+
+                <div class="form-group">
+
+                    <label>Product Name</label>
+
+                    <input type="text"
+                        id="productName"
+                        placeholder="Enter Product Name" />
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Select Category</label>
+
+                    <select id="productCategory">
+                        <option>Loading Categories...</option>
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Select Sub Category</label>
+
+                    <select id="productSubCategory">
+                        <option>Select Sub Category</option>
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Price</label>
+
+                    <input type="number"
+                        id="productPrice"
+                        placeholder="Enter Product Price" />
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Upload Product Image</label>
+
+                    <input type="file"
+                        id="productImage" />
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Description</label>
+
+                    <textarea rows="5"
+                        id="productDescription"
+                        placeholder="Enter Product Description"></textarea>
+
+                </div>
+
+                <button type="submit" class="btn">
+                    Add Product
+                </button>
+                <button type="button" class="btn" id="cancelEditButton" style="background:#6b7280; display:none; margin-left:12px;">
+                    Cancel Edit
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- Product List -->
+
+        <div class="section">
+
+            <h2>Product List</h2>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Product</th>
+                        <th>Category</th>
+                        <th>Sub Category</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="productTableBody">
+
+                 <tr id="">
+
+                 </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+<script>
+
+    // =========================
+    // LOAD CATEGORIES
+    // =========================
+
+    async function loadCategories() {
+
+        try {
+
+            const response =
+                await fetch('http://localhost:8000/public/allCategories');
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch categories');
+            }
+
+            const data = await response.json();
+
+            console.log("Categories:", data);
+
+            const subcategoryCategory =
+                document.getElementById('subcategoryCategory');
+
+            const productCategory =
+                document.getElementById('productCategory');
+
+            subcategoryCategory.innerHTML =
+                '<option value="">Select Category</option>';
+
+            productCategory.innerHTML =
+                '<option value="">Select Category</option>';
+
+            data.forEach(category => {
+
+                // Subcategory Dropdown
+
+                const option1 =
+                    document.createElement('option');
+
+                option1.value = category.id;
+                option1.textContent = category.maincatname;
+
+                subcategoryCategory.appendChild(option1);
+
+                // Product Dropdown
+
+                const option2 =
+                    document.createElement('option');
+
+                option2.value = category.id;
+                option2.textContent = category.maincatname;
+
+                productCategory.appendChild(option2);
+
+            });
+
+        }
+
+        catch (error) {
+
+            console.error('Category Load Error:', error);
+
+        }
+
+    }
+
+    // =========================
+    // LOAD SUB CATEGORIES
+    // =========================
+
+    async function loadSubCategories(mainCategory) {
+
+        const productSubCategory =
+            document.getElementById('productSubCategory');
+
+        if (!productSubCategory) return;
+
+        if (!mainCategory) {
+
+            productSubCategory.innerHTML =
+                '<option value="">Select Category First</option>';
+
+            return;
+
+        }
+
+        try {
+
+            const response =
+                await fetch(
+                    `http://localhost:8000/public/allsubcatname?mainc=${encodeURIComponent(mainCategory)}`
+                );
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch sub categories');
+            }
+
+            const data = await response.json();
+
+            console.log("Sub Categories:", data);
+
+            productSubCategory.innerHTML =
+                '<option value="">Select Sub Category</option>';
+
+            data.forEach(subcategory => {
+
+                const option =
+                    document.createElement('option');
+
+                option.value = subcategory.id;
+                option.textContent = subcategory.subcatname;
+
+                productSubCategory.appendChild(option);
+
+            });
+
+        }
+
+        catch (error) {
+
+            console.error('Subcategory Error:', error);
+
+            productSubCategory.innerHTML =
+                '<option value="">No subcategories available</option>';
+
+        }
+
+    }
+
+let selectedProductId = null;
+let isEditMode = false;
+
+function resetProductForm() {
+    selectedProductId = null;
+    isEditMode = false;
+    document.getElementById('productForm').reset();
+    document.getElementById('productCategory').selectedIndex = 0;
+    document.getElementById('productSubCategory').innerHTML = '<option value="">Select Sub Category</option>';
+    document.querySelector('#productForm button[type="submit"]').textContent = 'Add Product';
+    document.getElementById('cancelEditButton').style.display = 'none';
+}
+
+async function prepareProductEdit(product) {
+    selectedProductId = product.id;
+    isEditMode = true;
+    document.getElementById('productName').value = product.booktitle || '';
+    const categorySelect = document.getElementById('productCategory');
+    for (const option of categorySelect.options) {
+        if (option.text === product.maincatname) {
+            option.selected = true;
+            break;
+        }
+    }
+    await loadSubCategories(product.maincatname);
+    const subCategorySelect = document.getElementById('productSubCategory');
+    for (const option of subCategorySelect.options) {
+        if (option.text === product.subcatname) {
+            option.selected = true;
+            break;
+        }
+    }
+    document.getElementById('productPrice').value = product.originalprice || '';
+    document.getElementById('productDescription').value = product.description || '';
+    document.querySelector('#productForm button[type="submit"]').textContent = 'Update Product';
+    document.getElementById('cancelEditButton').style.display = 'inline-block';
+}
+
+async function loadProducts() {
+    fetch('http://localhost:8000/public/getallbookbycatname')
+        .then(response => response.json())
+        .then(data => {
+            console.log("Products:", data);
+            const productTableBody = document.getElementById('productTableBody');
+            productTableBody.innerHTML = '';
+            data.forEach(product => {
+                const row = document.createElement('tr');
+                row.dataset.description = product.description || '';
+                row.innerHTML = `
+                    <td>${product.id}</td>
+                    <td>${product.booktitle}</td>
+                    <td>${product.maincatname}</td>
+                    <td>${product.subcatname}</td>
+                    <td>${product.originalprice}</td>
+                    <td>
+                        <button class="action-btn edit" data-id="${product.id}">Edit</button>
+                        <button class="action-btn delete" data-id="${product.id}">Delete</button>
+                    </td>
+                `;
+                productTableBody.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error('Product Load Error:', error);
+        });
+
+}
+
+
+    document.getElementById('productTableBody')
+        .addEventListener('click', async function (event) {
+            const editBtn = event.target.closest('button.edit');
+            const deleteBtn = event.target.closest('button.delete');
+            if (editBtn) {
+                const row = editBtn.closest('tr');
+                const product = {
+                    id: editBtn.dataset.id,
+                    booktitle: row.children[1].textContent.trim(),
+                    maincatname: row.children[2].textContent.trim(),
+                    subcatname: row.children[3].textContent.trim(),
+                    originalprice: row.children[4].textContent.trim(),
+                    description: row.dataset.description || ''
+                };
+                await prepareProductEdit(product);
+                return;
+            }
+            if (deleteBtn) {
+                const productId = deleteBtn.dataset.id;
+                if (!confirm('Delete this product?')) {
+                    return;
+                }
+                try {
+                    const response = await fetch(`http://localhost:8000/public/deleteById?bid=${encodeURIComponent(productId)}`, {
+                        method: 'DELETE'
+                    });
+                    if (response.ok) {
+                        alert('Product Deleted Successfully');
+                        loadProducts();
+                    } else {
+                        alert('Failed To Delete Product');
+                    }
+                } catch (error) {
+                    console.error('Delete Error:', error);
+                    alert('Error deleting product');
+                }
+            }
+        });
+
+    // =========================
+    // INITIAL LOAD
+    // =========================
+
+    loadCategories();
+    loadProducts();
+
+    // =========================
+    // CATEGORY CHANGE
+    // =========================
+
+    document.getElementById('productCategory')
+        .addEventListener('change', function () {
+
+            const selectedOption =
+                this.options[this.selectedIndex];
+
+            const mainCategory =
+                selectedOption.text;
+
+            loadSubCategories(mainCategory);
+
+        });
+
+    // =========================
+    // ADD CATEGORY
+    // =========================
+
+    document.getElementById('categoryForm')
+        .addEventListener('submit', async function (e) {
+
+            e.preventDefault();
+
+            const categoryName =
+                document.getElementById('categoryName').value;
+
+            if (!categoryName) {
+
+                alert("Please Enter Category Name");
+                return;
+
+            }
+
+            try {
+
+                const response = await fetch(
+                    'http://localhost:8000/public/saveCategories',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            maincatname: categoryName
+                        })
+                    }
+                );
+
+                if (response.ok) {
+
+                    alert("Category Added Successfully");
+
+                    document.getElementById('categoryForm').reset();
+
+                    loadCategories();
+
+                } else {
+
+                    alert("Failed To Add Category");
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error('Category Save Error:', error);
+
+            }
+
+        });
+
+    // =========================
+    // ADD SUB CATEGORY
+    // =========================
+
+    document.getElementById('subcategoryForm')
+        .addEventListener('submit', async function (e) {
+
+            e.preventDefault();
+
+            const categorySelect =
+                document.getElementById('subcategoryCategory');
+
+            const selectedOption =
+                categorySelect.options[categorySelect.selectedIndex];
+
+            const mainCategory =
+                selectedOption.text;
+
+            const subcategoryName =
+                document.getElementById('subcategoryName').value;
+
+            if (!mainCategory || !subcategoryName) {
+
+                alert("Please Fill All Fields");
+                return;
+
+            }
+
+            try {
+
+                const response = await fetch(
+                    'http://localhost:8000/public/saveSubCategories',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            maincatname: mainCategory,
+                            subcatname: subcategoryName
+                        })
+                    }
+                );
+
+                if (response.ok) {
+
+                    alert("Sub Category Added Successfully");
+
+                    document.getElementById('subcategoryForm').reset();
+
+                }
+
+                else {
+
+                    alert("Failed To Add Sub Category");
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error('Sub Category Error:', error);
+
+            }
+
+        });
+
+    // =========================
+    // ADD PRODUCT
+    // =========================
+
+    document.getElementById('productForm')
+        .addEventListener('submit', async function (e) {
+
+            e.preventDefault();
+
+            const productName =
+                document.getElementById('productName').value;
+
+            const categorySelect =
+                document.getElementById('productCategory');
+
+            const subCategorySelect =
+                document.getElementById('productSubCategory');
+
+            const productPrice =
+                document.getElementById('productPrice').value;
+
+            const productDescription =
+                document.getElementById('productDescription').value;
+
+            const productImage =
+                document.getElementById('productImage');
+
+            const categoryOption =
+                categorySelect.options[categorySelect.selectedIndex];
+
+            const subCategoryOption =
+                subCategorySelect.options[subCategorySelect.selectedIndex];
+
+            const mainCategory =
+                categoryOption.text;
+
+            const subCategory =
+                subCategoryOption.text;
+
+            if (
+                !productName ||
+                !mainCategory ||
+                !subCategory ||
+                !productPrice
+            ) {
+
+                alert("Please Fill All Required Fields");
+                return;
+
+            }
+
+            try {
+
+                const formData = new FormData();
+
+                // Product Entity Fields
+
+                formData.append('booktitle', productName);
+
+                formData.append('maincatname', mainCategory);
+
+                formData.append('subcatname', subCategory);
+
+                formData.append('originalprice', productPrice);
+
+                formData.append('description', productDescription);
+
+                // Image
+
+                if (productImage.files.length > 0) {
+
+                    formData.append(
+                        'imageFile',
+                        productImage.files[0]
+                    );
+
+                }
+
+                const endpoint = isEditMode && selectedProductId
+                    ? 'http://localhost:8000/public/updateBookById'
+                    : 'http://localhost:8000/public/saveproduct';
+
+                const method = isEditMode && selectedProductId ? 'PUT' : 'POST';
+
+                if (isEditMode && selectedProductId) {
+                    formData.append('id', selectedProductId);
+                }
+
+                const response = await fetch(endpoint, {
+                    method,
+                    body: formData
+                });
+
+                if (response.ok) {
+
+                    const result = await response.text();
+
+                    console.log(result);
+
+                    alert(isEditMode ? "Product Updated Successfully" : "Product Added Successfully");
+
+                    resetProductForm();
+                    loadProducts();
+
+                }
+
+                else {
+
+                    alert(isEditMode ? "Failed To Update Product" : "Failed To Add Product");
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error('Product Error:', error);
+
+                alert("Error Adding Product");
+
+            }
+
+        });
+
+    document.getElementById('cancelEditButton')
+        .addEventListener('click', function () {
+            resetProductForm();
+        });
+
+</script>
+
+
+
+</body>
+
+</html>
+

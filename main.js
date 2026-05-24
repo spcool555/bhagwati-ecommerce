@@ -67,3 +67,52 @@ function showPage() {
     document.getElementById("myDiv").style.display = "block";
 }
 // loader end
+
+// Load header categories across all pages
+async function loadHeaderCategories() {
+    try {
+        const res = await fetch('http://localhost:8000/public/allCategories');
+        if (!res.ok) return;
+        const categories = await res.json();
+
+        // Populate any header select controls inside .top-navbar-1
+        const headerSelects = document.querySelectorAll('.top-navbar-1 select.form-control');
+        headerSelects.forEach(select => {
+            // preserve a default first option if present
+            const defaultOpt = select.querySelector('option');
+            select.innerHTML = '';
+            if (defaultOpt) {
+                const opt = document.createElement('option');
+                opt.value = '';
+                opt.textContent = defaultOpt.textContent || 'All category';
+                select.appendChild(opt);
+            }
+            categories.forEach(cat => {
+                const o = document.createElement('option');
+                o.value = cat.maincatname;
+                o.textContent = cat.maincatname;
+                select.appendChild(o);
+            });
+        });
+
+        // Optionally, populate selects with id=productCategory used in Shop/admin pages
+        const productSelect = document.getElementById('productCategory');
+        if (productSelect) {
+            productSelect.innerHTML = '<option value="">All category</option>';
+            categories.forEach(cat => {
+                const o = document.createElement('option');
+                o.value = cat.maincatname;
+                o.textContent = cat.maincatname;
+                productSelect.appendChild(o);
+            });
+        }
+
+    } catch (err) {
+        console.error('Header categories load error:', err);
+    }
+}
+
+// Run on load
+document.addEventListener('DOMContentLoaded', () => {
+    loadHeaderCategories();
+});
