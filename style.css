@@ -121,10 +121,19 @@ a {
 
 #top-navbar-1 {
     background-color: #F5F5F5;
-    padding: 25px;
+    padding: 15px 0;
+    display: flex;
     justify-content: center;
     align-items: center;
+}
+
+#top-navbar-1 .container {
+    width: 100%;
+}
+
+#top-navbar-1 .col-lg-3 {
     display: flex;
+    align-items: center;
 }
 
 #top-navbar-1 ul li {
@@ -135,6 +144,9 @@ a {
 }
 
 #top-navbar-1 img {
+    display: block;
+    max-height: 70px;
+    width: auto;
     padding: 5px;
 }
 
