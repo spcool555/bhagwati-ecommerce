@@ -132,6 +132,74 @@ function populateProductDropdowns(categories) {
     });
 }
 
+function buildShopRedirectUrl(product) {
+    const params = new URLSearchParams();
+    if (product.booktitle) params.set('booktitle', product.booktitle);
+    if (product.maincatname) params.set('maincatname', product.maincatname);
+    if (product.subcatname) params.set('subcatname', product.subcatname);
+    return 'shop.html?' + params.toString();
+}
+
+function renderFeaturedProducts(products) {
+    const container = document.getElementById('featuredProductsCarousel');
+    if (!container) return;
+    if (!Array.isArray(products) || !products.length) {
+        container.innerHTML = '<div class="col-12"><p>No featured products available.</p></div>';
+        return;
+    }
+    container.innerHTML = '';
+    products.slice(0, 4).forEach(product => {
+        const imageUrl = product.imageUrl || product.bookimage || product.imagePath || product.image || 'images/shop-p-1.jpg';
+        const productLink = buildShopRedirectUrl(product);
+        const card = document.createElement('div');
+        card.className = 'col-lg-3 col-sm-3';
+        card.innerHTML = `
+            <div class="product-grid">
+                <div class="product-content">
+                    <h3 class="title"><a href="${productLink}">${product.booktitle || 'Untitled Product'}</a></h3>
+                    <div class="price"><span>${product.originalprice ? '$' + product.originalprice : 'Price unavailable'}</span></div>
+                    <ul class="rating">
+                        <li class="fa fa-star"></li>
+                        <li class="fa fa-star"></li>
+                        <li class="fa fa-star"></li>
+                        <li class="fa fa-star"></li>
+                        <li class="fa fa-star"></li>
+                    </ul>
+                    <ul class="product-links">
+                        <li><a href="${productLink}"><i class="fa fa-shopping-bag"></i></a></li>
+                        <li><a href="${productLink}"><i class="fa fa-random"></i></a></li>
+                        <li><a href="${productLink}"><i class="fa fa-heart"></i></a></li>
+                        <li><a href="${productLink}"><i class="fa fa-eye"></i></a></li>
+                    </ul>
+                </div>
+                <div class="product-image">
+                    <a href="${productLink}" class="image">
+                        <img class="pic-1" src="${imageUrl}">
+                        <img class="pic-2" src="${imageUrl}">
+                    </a>
+                    ${product.originalprice ? '<span class="product-sale-label">Sale</span>' : ''}
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+async function loadFeaturedProducts() {
+    const container = document.getElementById('featuredProductsCarousel');
+    if (!container) return;
+    container.innerHTML = '<div class="col-12"><p>Loading featured products...</p></div>';
+    try {
+        const response = await fetch('http://localhost:8000/public/allbooks');
+        if (!response.ok) throw new Error('Featured products request failed');
+        const products = await response.json();
+        renderFeaturedProducts(products);
+    } catch (err) {
+        console.error('Featured product load error:', err);
+        container.innerHTML = '<div class="col-12"><p>Unable to load featured products.</p></div>';
+    }
+}
+
 function redirectToShopSearch(searchText) {
     if (!searchText || !searchText.trim()) return;
     const query = new URLSearchParams();
@@ -160,4 +228,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    loadFeaturedProducts();
 });
