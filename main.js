@@ -84,7 +84,7 @@ async function loadHeaderCategories() {
             if (defaultOpt) {
                 const opt = document.createElement('option');
                 opt.value = '';
-                opt.textContent = defaultOpt.textContent || 'All category';
+                opt.textContent = defaultOpt.textContent || '';
                 select.appendChild(opt);
             }
             categories.forEach(cat => {
@@ -98,7 +98,7 @@ async function loadHeaderCategories() {
         // Optionally, populate selects with id=productCategory used in Shop/admin pages
         const productSelect = document.getElementById('productCategory');
         if (productSelect) {
-            productSelect.innerHTML = '<option value="">All category</option>';
+            productSelect.innerHTML = '';
             categories.forEach(cat => {
                 const o = document.createElement('option');
                 o.value = cat.maincatname;
@@ -107,12 +107,57 @@ async function loadHeaderCategories() {
             });
         }
 
+        populateProductDropdowns(categories);
+
     } catch (err) {
         console.error('Header categories load error:', err);
     }
 }
 
+function populateProductDropdowns(categories) {
+    const dropdownLists = document.querySelectorAll('.dropdown-2 .dropdown-menu .maincat-dropdown-list');
+    dropdownLists.forEach(list => {
+        list.innerHTML = '';
+        if (!categories || !categories.length) {
+            list.innerHTML = '<p class="dropdown-item-text">No categories available.</p>';
+            return;
+        }
+        categories.forEach(cat => {
+            const link = document.createElement('a');
+            link.className = 'dropdown-item';
+            link.href = `shop.html?maincatname=${encodeURIComponent(cat.maincatname)}`;
+            link.textContent = cat.maincatname;
+            list.appendChild(link);
+        });
+    });
+}
+
+function redirectToShopSearch(searchText) {
+    if (!searchText || !searchText.trim()) return;
+    const query = new URLSearchParams();
+    query.set('booktitle', searchText.trim());
+    window.location.href = 'shop.html?' + query.toString();
+}
+
 // Run on load
 document.addEventListener('DOMContentLoaded', () => {
     loadHeaderCategories();
+
+    const searchInputs = document.querySelectorAll('.top-navbar-1 input[type="search"]');
+    searchInputs.forEach(input => {
+        const parent = input.closest('.overlay-1');
+        const searchButton = parent ? parent.querySelector('a') : null;
+        if (searchButton) {
+            searchButton.addEventListener('click', event => {
+                event.preventDefault();
+                redirectToShopSearch(input.value);
+            });
+        }
+        input.addEventListener('keypress', event => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                redirectToShopSearch(input.value);
+            }
+        });
+    });
 });

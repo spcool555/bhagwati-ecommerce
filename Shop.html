@@ -73,10 +73,7 @@
                             <div class="col-lg-4 col-4 col-sm-3 ">
 
 
-                                <select class="form-control" name="" id="productCategory">
-                                    <option>All category</option>
-                               
-                                </select>
+
 
                             </div>
                             <div class="col-lg-1 col-2 col-sm-2 mt-2 ">
@@ -266,79 +263,12 @@
                                         <div class="container">
                                             <div class="row">
                                                 <div class="col-lg-6">
-                                                    <h6>Writing Supplies</h6>
-                                                    <ul>
-                                                        <li>
-                                                            <a href="Shop.html">
-                                                                Ballpoint Pens
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="Shop.html">
-                                                                Marker Pens
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="Shop.html">
-                                                                Fineliners
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="Shop.html">
-                                                                Pencils
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="Shop.html">
-                                                                Fountain Pens
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="Shop.html">
-                                                                Gel Pens
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="Shop.html">
-                                                                Rollerball Pens
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="Shop.html">
-                                                                Pen Refills
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="">
-                                                                Pencil Cases
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="">
-                                                                Correction
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="Shop.html">
-                                                                Rubbers And Erasers
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="Shop.html">
-                                                                Stationery Sets
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="Shop.html">
-                                                                Writing Accessories
-                                                            </a>
-                                                        </li>
-                                                    </ul>
+                                                    <h6>Categories</h6>
+                                                    <div class="maincat-dropdown-list"></div>
                                                 </div>
                                                 <div class="col-lg-6">
                                                     <img src="images/menu-2.jpg" alt="" srcset="">
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
@@ -778,8 +708,7 @@
                 document.getElementById('subCategoryFilters');
 
             if (productCategory) {
-                productCategory.innerHTML =
-                    '<option value="">All category</option>';
+                productCategory.innerHTML = '';
             }
 
             if (categoryFilters) {
@@ -937,11 +866,12 @@
     }
 
 
-    async function loadProducts(maincatname, subcatname) {
+    async function loadProducts(maincatname, subcatname, booktitle) {
         try {
             const params = new URLSearchParams();
             if (maincatname) params.append('maincatname', maincatname);
             if (subcatname) params.append('subcatname', subcatname);
+            if (booktitle) params.append('booktitle', booktitle);
             const url = 'http://localhost:8000/public/allbooks' + (params.toString() ? ('?' + params.toString()) : '');
 
             const response = await fetch(url);
@@ -997,8 +927,16 @@
             console.error('Product Load Error:', error);
         }
     }
+    const initialParams = new URLSearchParams(window.location.search);
+    const initialMain = initialParams.get('maincatname');
+    const initialSub = initialParams.get('subcatname');
+    const initialBook = initialParams.get('booktitle');
+    const searchInput = document.querySelector('.top-navbar-1 input[type="search"]');
+    if (searchInput && initialBook) {
+        searchInput.value = initialBook;
+    }
     loadCategories();
-    loadProducts();
+    loadProducts(initialMain, initialSub, initialBook);
 
 </script>
 </body>
