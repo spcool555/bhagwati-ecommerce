@@ -7,6 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bhagwati Admin Panel</title>
 
+    <script>
+        if (sessionStorage.getItem('bhagwatiAdminAuthenticated') !== 'true') {
+            window.location.replace('login.html');
+        }
+    </script>
+
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
@@ -96,6 +102,26 @@
         .admin {
             font-weight: bold;
             color: #2563eb;
+        }
+
+        .admin-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logout-btn {
+            background: #ef4444;
+            border: none;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
         }
 
         /* Cards */
@@ -315,8 +341,15 @@
         <div class="topbar">
             <h2>Dashboard</h2>
 
-            <div class="admin">
-                Welcome Admin
+            <div class="admin-actions">
+                <div class="admin">
+                    Welcome Admin
+                </div>
+
+                <button type="button" class="logout-btn" id="logoutButton">
+                    <i class="fa fa-sign-out-alt"></i>
+                    Logout
+                </button>
             </div>
         </div>
 
@@ -520,6 +553,14 @@
     </div>
 
 <script>
+    const logoutButton = document.getElementById('logoutButton');
+
+    if (logoutButton) {
+        logoutButton.addEventListener('click', function () {
+            sessionStorage.removeItem('bhagwatiAdminAuthenticated');
+            window.location.href = 'login.html';
+        });
+    }
 
     // =========================
     // LOAD CATEGORIES
