@@ -271,6 +271,59 @@ function redirectToShopSearch(searchText) {
     window.location.href = 'shop.html?' + query.toString();
 }
 
+function setupEnquiryForm() {
+    const form = document.getElementById('enquiryForm');
+    if (!form) return;
+
+    const submitButton = form.querySelector('button[type="submit"]');
+
+    form.addEventListener('submit', async event => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const enquiry = {
+            name: String(formData.get('name') || '').trim(),
+            phone: String(formData.get('phone') || '').trim(),
+            message: String(formData.get('message') || '').trim()
+        };
+
+        if (!enquiry.name || !enquiry.phone || !enquiry.message) {
+            alert('Please fill all enquiry fields.');
+            return;
+        }
+
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sending...';
+        }
+
+        try {
+            const response = await fetch('http://localhost:8000/public/send-enquiry', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(enquiry)
+            });
+
+            if (!response.ok) {
+                throw new Error('Enquiry request failed');
+            }
+
+            alert('Enquiry sent successfully.');
+            form.reset();
+        } catch (error) {
+            console.error('Enquiry send error:', error);
+            alert('Unable to send enquiry. Please try again.');
+        } finally {
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Send Enquiry';
+            }
+        }
+    });
+}
+
 // Run on load
 document.addEventListener('DOMContentLoaded', () => {
     loadHeaderCategories();
@@ -294,4 +347,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     loadFeaturedProducts();
+    setupEnquiryForm();
 });

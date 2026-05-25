@@ -6,7 +6,10 @@
     /* border: 1px solid red; */
     /* font-family: 'Raleway', sans-serif; */
 }
-
+#sidebar-section .logo {
+    width: auto;
+    height: 94px !important;
+}
 input:focus {
     outline: none;
 }

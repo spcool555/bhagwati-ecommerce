@@ -213,7 +213,7 @@
     <div id="mySidenav-2" class="sidenav">
         <div class="header-top">
             <div class="header">
-                <img src="images/logo.png" alt="Logo">
+                <img src="images/official-nobg.png" alt="Logo">
             </div>
             <div class="close">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav2()">&times;</a>
@@ -327,7 +327,7 @@
     <div class="container">
         <div class="sidebar">
             <div class="logo">
-                <a href=""><img src="images/logo.png" alt=""></a>
+                <a href=""><img src="images/official-nobg.png" alt=""></a>
             </div>
             <div class="bar" onclick="openNav2()">
                 <i class="fa fa-bars" aria-hidden="true" style="color: #000 !important;"></i>
@@ -460,8 +460,11 @@
                     <li>
                         <span> <a href="about.htm">About Us</a></span>
                     </li>
-                    <li>
+                           <li>
                         <span><a href="Contact.html">Contact Us</a></span>
+                    </li>
+                    <li>
+                        <span><a href="admin.html">Admin</a></span>
                     </li>
                  
                 </ul>
@@ -758,15 +761,15 @@
                     <div class="box-4"></div>
                     <div class="product-grid">
                         <div class="product-image">
-                            <a href="product_details.html" class="image">
+                            <a href="product_details.html?bid=${product.id}" class="image">
                                 <img src="${imageUrl}" alt="${product.booktitle || 'Product'}" class="pic-1">
                                 <img src="${imageUrl}" alt="${product.booktitle || 'Product'}" class="pic-2">
                             </a>
-                            ${product.originalprice ? '<span class="product-sale-label">Sale</span>' : ''}
+                           
                         </div>
                         <div class="product-content">
                             <h3 class="title"><a href="product_details.html?bid=${product.id}">${product.booktitle || 'Untitled Product'}</a></h3>
-                            <div class="price"><span>${product.originalprice ? '$' + product.originalprice : 'Price unavailable'}</span></div>
+                            <div class="price"><span>${product.originalprice ? '₹' + product.originalprice : 'Price unavailable'}</span></div>
                             <ul class="rating">
                                 <li class="fa fa-star"></li>
                                 <li class="fa fa-star"></li>
@@ -776,7 +779,7 @@
                             </ul>
                             <ul class="product-links">
                        
-                                <li><a href="#"><i class="fa fa-eye"></i></a></li>
+                                <li><a href="product_details.html?bid=${product.id}"><i class="fa fa-eye"></i></a></li>
                             </ul>
                         </div>
                     </div>
