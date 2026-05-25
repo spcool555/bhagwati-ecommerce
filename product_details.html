@@ -383,35 +383,12 @@
                             <div class="row">
                                 
                                 <div class="col-lg-6">
-                                    <a href="#" class="round-black-btn">Enquiry</a>
+                                    <a href="#" class="round-black-btn" id="openEnquiryModal" data-toggle="modal" data-target="#enquiryModal">Enquiry</a>
                                 </div>
                             </div>
 
                         </div>
-                        <div class="share-product">
-                            <ul>
-                                <li>
-                                    <a href="">
-                                        <i class="fas fa-share-square"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="">
-                                        <i class="fab fa-whatsapp    "></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="">
-                                        <i class="fab fa-instagram    "></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="">
-                                        <i class="fa fa-heart-o" aria-hidden="true"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                  
                     </div>
                 </div>
             </div>
@@ -497,6 +474,53 @@
 
         </div>
     </section>
+
+    <div class="modal fade" id="enquiryModal" tabindex="-1" role="dialog" aria-labelledby="enquiryModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form id="enquiryForm">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="enquiryModalLabel">Send Enquiry</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert d-none" id="enquiryMessage" role="alert"></div>
+
+                        <div class="mb-3">
+                            <h6 id="enquiryProductTitle" class="mb-1"></h6>
+                            <small class="text-muted" id="enquiryProductMeta"></small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="enquiryName">Name</label>
+                            <input type="text" class="form-control" id="enquiryName" name="name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="enquiryPhone">Phone Number</label>
+                            <input type="tel" class="form-control" id="enquiryPhone" name="phone" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="enquiryEmail">Email</label>
+                            <input type="email" class="form-control" id="enquiryEmail" name="email">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="enquiryText">Message</label>
+                            <textarea class="form-control" id="enquiryText" name="message" rows="4" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="round-black-btn border-0" id="submitEnquiryButton">Send Enquiry</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <section class="suggest-product" id="suggest-product">
         <div class="container">
@@ -698,6 +722,10 @@
 <!-- footer-section-end -->
 
     <!-- Optional JavaScript -->
+    <a class="whatsapp-float" href="https://wa.me/918208960864" target="_blank" rel="noopener" aria-label="Chat on WhatsApp at +91 8208960864" title="WhatsApp: +91 8208960864">
+        <i class="fa fa-whatsapp fa-brands" aria-hidden="true"></i>
+    </a>
+
     <script src=" main.js "></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -733,6 +761,33 @@
 
 <script>
 
+let currentProductDetails = null;
+
+function updateEnquiryProductSummary() {
+    if (!currentProductDetails) return;
+
+    const title = currentProductDetails.booktitle || 'Selected Product';
+    const price = currentProductDetails.originalprice ? `₹${currentProductDetails.originalprice}` : 'Price unavailable';
+    const category = [currentProductDetails.maincatname, currentProductDetails.subcatname]
+        .filter(Boolean)
+        .join(' / ');
+
+    document.getElementById('enquiryProductTitle').textContent = title;
+    document.getElementById('enquiryProductMeta').textContent = category ? `${price} | ${category}` : price;
+}
+
+function showEnquiryMessage(type, message) {
+    const messageBox = document.getElementById('enquiryMessage');
+    messageBox.className = `alert alert-${type}`;
+    messageBox.textContent = message;
+}
+
+function resetEnquiryMessage() {
+    const messageBox = document.getElementById('enquiryMessage');
+    messageBox.className = 'alert d-none';
+    messageBox.textContent = '';
+}
+
 async function loadProductDetails() {
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -745,6 +800,7 @@ async function loadProductDetails() {
         );
 
         const data = await response.json();
+        currentProductDetails = { ...data, bid };
 
         console.log(data);
 
@@ -760,11 +816,16 @@ async function loadProductDetails() {
         document.getElementById('sub-category').innerText =
             data.subcatname || '';
 
+        document.getElementById('product-description').innerText =
+            data.description || '';
+
         document.getElementById('description').innerText =
             data.description || '';
 
         document.getElementById('product-image').src =
-            data.imagePath;
+            data.imagePath || '';
+
+        updateEnquiryProductSummary();
 
     } catch (error) {
 
@@ -773,6 +834,67 @@ async function loadProductDetails() {
     }
 
 }
+
+document.getElementById('openEnquiryModal').addEventListener('click', function () {
+    resetEnquiryMessage();
+    updateEnquiryProductSummary();
+});
+
+document.getElementById('enquiryForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    const submitButton = document.getElementById('submitEnquiryButton');
+    const formData = new FormData(event.target);
+    const payload = {
+        name: formData.get('name').trim(),
+        phone: formData.get('phone').trim(),
+        email: formData.get('email').trim(),
+        message: formData.get('message').trim(),
+        bid: currentProductDetails && currentProductDetails.bid,
+        booktitle: currentProductDetails && currentProductDetails.booktitle,
+        originalprice: currentProductDetails && currentProductDetails.originalprice,
+        maincatname: currentProductDetails && currentProductDetails.maincatname,
+        subcatname: currentProductDetails && currentProductDetails.subcatname,
+        description: currentProductDetails && currentProductDetails.description,
+        imagePath: currentProductDetails && currentProductDetails.imagePath,
+        product: {
+            bid: currentProductDetails && currentProductDetails.bid,
+            booktitle: currentProductDetails && currentProductDetails.booktitle,
+            originalprice: currentProductDetails && currentProductDetails.originalprice,
+            maincatname: currentProductDetails && currentProductDetails.maincatname,
+            subcatname: currentProductDetails && currentProductDetails.subcatname,
+            description: currentProductDetails && currentProductDetails.description,
+            imagePath: currentProductDetails && currentProductDetails.imagePath
+        }
+    };
+
+    submitButton.disabled = true;
+    submitButton.textContent = 'Sending...';
+    resetEnquiryMessage();
+
+    try {
+        const response = await fetch('http://localhost:8000/public/send-enquiry', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            throw new Error('Enquiry request failed');
+        }
+
+        showEnquiryMessage('success', 'Your enquiry has been sent successfully.');
+        event.target.reset();
+    } catch (error) {
+        console.error('Enquiry submit error:', error);
+        showEnquiryMessage('danger', 'Unable to send enquiry. Please try again.');
+    } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Send Enquiry';
+    }
+});
 
 loadProductDetails();
 

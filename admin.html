@@ -74,6 +74,47 @@
             color: white;
         }
 
+        .whatsapp-float {
+            position: fixed;
+            right: 22px;
+            bottom: 22px;
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            background: #25D366;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            line-height: 1;
+            text-decoration: none;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24);
+            z-index: 9999;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .whatsapp-float:hover {
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.28);
+        }
+
+        .whatsapp-float:focus {
+            outline: 3px solid rgba(37, 211, 102, 0.35);
+            outline-offset: 3px;
+        }
+
+        @media (max-width: 575px) {
+            .whatsapp-float {
+                right: 16px;
+                bottom: 16px;
+                width: 52px;
+                height: 52px;
+                font-size: 27px;
+            }
+        }
+
         /* Main */
 
         .main {
@@ -1077,7 +1118,11 @@ async function loadProducts() {
             resetProductForm();
         });
 
-</script>
+    </script>
+
+    <a class="whatsapp-float" href="https://wa.me/918208960864" target="_blank" rel="noopener" aria-label="Chat on WhatsApp at +91 8208960864" title="WhatsApp: +91 8208960864">
+        <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+    </a>
 
 
 
