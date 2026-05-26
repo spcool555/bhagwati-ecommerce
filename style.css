@@ -2288,6 +2288,31 @@ img {
     flex-grow: 1;
 }
 
+#product-details .preview-pic img,
+#product-details #product-image {
+    width: 100%;
+    height: auto;
+    max-height: 550px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+#enquiryModal .modal-dialog {
+    max-width: 520px;
+    margin: 1.75rem auto;
+}
+
+#enquiryModal .modal-content {
+    max-height: 80vh;
+    overflow: hidden;
+}
+
+#enquiryModal .modal-body {
+    max-height: calc(80vh - 140px);
+    overflow-y: auto;
+}
+
 .preview-thumbnail.nav-tabs {
     border: none;
     margin-top: 15px;
