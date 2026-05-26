@@ -556,7 +556,7 @@
         try {
 
             const response =
-                await fetch('http://localhost:8000/public/allCategories');
+                await fetch('https://bhagwaticardsandpapers.com/api/public/allCategories');
 
             const categories =
                 await response.json();
@@ -696,7 +696,7 @@
 
         try {
             const response = await fetch(
-                `http://localhost:8000/public/allsubcatname?mainc=${encodeURIComponent(mainCategory)}`
+                `https://bhagwaticardsandpapers.com/api/public/allsubcatname?mainc=${encodeURIComponent(mainCategory)}`
             );
 
             if (!response.ok) {
@@ -737,7 +737,7 @@
             if (maincatname) params.append('maincatname', maincatname);
             if (subcatname) params.append('subcatname', subcatname);
             if (booktitle) params.append('booktitle', booktitle);
-            const url = 'http://localhost:8000/public/allbooks' + (params.toString() ? ('?' + params.toString()) : '');
+            const url = 'https://bhagwaticardsandpapers.com/api/public/allbooks' + (params.toString() ? ('?' + params.toString()) : '');
 
             const response = await fetch(url);
             if (!response.ok) {

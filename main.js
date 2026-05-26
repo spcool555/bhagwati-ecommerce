@@ -71,7 +71,7 @@ function showPage() {
 // Load header categories across all pages
 async function loadHeaderCategories() {
     try {
-        const res = await fetch('http://localhost:8000/public/allCategories');
+        const res = await fetch('https://bhagwaticardsandpapers.com/api/public/allCategories');
         if (!res.ok) return;
         const categories = await res.json();
 
@@ -192,7 +192,7 @@ async function loadFeaturedProducts() {
     if (!container) return;
     container.innerHTML = '<div class="col-12"><p>Loading featured products...</p></div>';
     try {
-        const response = await fetch('http://localhost:8000/public/allbooks');
+        const response = await fetch('https://bhagwaticardsandpapers.com/api/public/allbooks');
         // remove static placeholders for mobile too, so API-render replaces them
         if (mobileIndicatorsContainer) {
             mobileIndicatorsContainer.innerHTML = '';
@@ -298,7 +298,7 @@ function setupEnquiryForm() {
         }
 
         try {
-            const response = await fetch('http://localhost:8000/public/send-enquiry', {
+            const response = await fetch('https://bhagwaticardsandpapers.com/api/public/send-enquiry', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

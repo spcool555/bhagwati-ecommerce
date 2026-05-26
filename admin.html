@@ -612,7 +612,7 @@
         try {
 
             const response =
-                await fetch('http://localhost:8000/public/allCategories');
+                await fetch('https://bhagwaticardsandpapers.com/api/public/allCategories');
 
             if (!response.ok) {
                 throw new Error('Failed to fetch categories');
@@ -692,7 +692,7 @@
 
             const response =
                 await fetch(
-                    `http://localhost:8000/public/allsubcatname?mainc=${encodeURIComponent(mainCategory)}`
+                    `https://bhagwaticardsandpapers.com/api/public/allsubcatname?mainc=${encodeURIComponent(mainCategory)}`
                 );
 
             if (!response.ok) {
@@ -770,7 +770,7 @@ async function prepareProductEdit(product) {
 }
 
 async function loadProducts() {
-    fetch('http://localhost:8000/public/getallbookbycatname')
+    fetch('https://bhagwaticardsandpapers.com/api/public/getallbookbycatname')
         .then(response => response.json())
         .then(data => {
             console.log("Products:", data);
@@ -823,7 +823,7 @@ async function loadProducts() {
                     return;
                 }
                 try {
-                    const response = await fetch(`http://localhost:8000/public/deleteById?bid=${encodeURIComponent(productId)}`, {
+                    const response = await fetch(`https://bhagwaticardsandpapers.com/api/public/deleteById?bid=${encodeURIComponent(productId)}`, {
                         method: 'DELETE'
                     });
                     if (response.ok) {
@@ -885,7 +885,7 @@ async function loadProducts() {
             try {
 
                 const response = await fetch(
-                    'http://localhost:8000/public/saveCategories',
+                    'https://bhagwaticardsandpapers.com/api/public/saveCategories',
                     {
                         method: 'POST',
                         headers: {
@@ -952,7 +952,7 @@ async function loadProducts() {
             try {
 
                 const response = await fetch(
-                    'http://localhost:8000/public/saveSubCategories',
+                    'https://bhagwaticardsandpapers.com/api/public/saveSubCategories',
                     {
                         method: 'POST',
                         headers: {
@@ -1068,8 +1068,8 @@ async function loadProducts() {
                 }
 
                 const endpoint = isEditMode && selectedProductId
-                    ? 'http://localhost:8000/public/updateBookById'
-                    : 'http://localhost:8000/public/saveproduct';
+                    ? 'https://bhagwaticardsandpapers.com/api/public/updateBookById'
+                    : 'https://bhagwaticardsandpapers.com/api/public/saveproduct';
 
                 const method = isEditMode && selectedProductId ? 'PUT' : 'POST';
 
