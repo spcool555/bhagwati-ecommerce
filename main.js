@@ -149,7 +149,7 @@ function renderFeaturedProducts(products) {
     }
     container.innerHTML = '';
     products.slice(0, 4).forEach(product => {
-        const imageUrl = product.imageUrl || product.bookimage || product.imagePath || product.image || 'images/shop-p-1.jpg';
+        const imageUrl = product.imageUrl || product.bookimage || product.imagePath || product.image || '/images/shop-p-1.jpg';
         const productLink = buildShopRedirectUrl(product);
         const card = document.createElement('div');
         card.className = 'col-lg-3 col-sm-3';
@@ -235,7 +235,7 @@ function renderFeaturedProductsMobile(products) {
 
     inner.innerHTML = '';
     products.forEach((product, idx) => {
-        const imageUrl = product.imageUrl || product.bookimage || product.imagePath || product.image || 'images/shop-p-1.jpg';
+        const imageUrl = product.imageUrl || product.bookimage || product.imagePath || product.image || '/images/shop-p-1.jpg';
         const productLink = buildShopRedirectUrl(product);
         const item = document.createElement('div');
         item.className = 'carousel-item' + (idx === 0 ? ' active' : '');

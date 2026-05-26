@@ -701,7 +701,7 @@ navbar-section .dropdown-1 ul li a {
 /* <!--------------------- banner-section-start----------- --> */
 
 #banner-section .img-1 {
-    background-image: url(images/card6.jpg);
+    background-image: url(/images/card6.jpg);
     width: 100%;
     background-size: 100% 100%;
     height: 450px;
@@ -709,7 +709,7 @@ navbar-section .dropdown-1 ul li a {
 }
 
 #banner-section .img-2 {
-    background-image: url(images/station-h2.jpg);
+    background-image: url(/images/station-h2.jpg);
     width: 100%;
     background-size: 100% 100%;
     height: 450px;
@@ -717,7 +717,7 @@ navbar-section .dropdown-1 ul li a {
 }
 
 #banner-section .img-3 {
-    background-image: url(images/station-h3.jpg);
+    background-image: url(/images/station-h3.jpg);
     width: 100%;
     background-size: 100% 100%;
     height: 210px;
@@ -725,7 +725,7 @@ navbar-section .dropdown-1 ul li a {
 }
 
 #banner-section .img-4 {
-    background-image: url(images/rim.avif);
+    background-image: url(/images/rim.avif);
     width: 100%;
     background-size: 100% 100%;
     height: 210px;
@@ -1027,7 +1027,7 @@ navbar-section .dropdown-1 ul li a {
 /* <!--------------------- banner-section-start----------- --> */
 
 #banner-section-2 {
-    background-image: url(images/banner.jpg);
+    background-image: url(/images/banner.jpg);
     width: 100%;
     height: 600px;
     background-size: 100% 100%;
@@ -1141,7 +1141,7 @@ navbar-section .dropdown-1 ul li a {
 /* <!--------------------- banner-section-4-start----------- --> */
 
 #banner-section-4 {
-    background-image: url(images/banner-4.jpg);
+    background-image: url(/images/banner-4.jpg);
     width: 100%;
     height: 400px;
     margin-top: 25px !important;
