@@ -115,7 +115,7 @@ async function loadHeaderCategories() {
 }
 
 function populateProductDropdowns(categories) {
-    const dropdownLists = document.querySelectorAll('.dropdown-2 .dropdown-menu .maincat-dropdown-list');
+    const dropdownLists = document.querySelectorAll('.dropdown-2 .dropdown-menu .maincat-dropdown-list, .mobile-maincat-dropdown-list');
     dropdownLists.forEach(list => {
         list.innerHTML = '';
         if (!categories || !categories.length) {
@@ -124,8 +124,8 @@ function populateProductDropdowns(categories) {
         }
         categories.forEach(cat => {
             const link = document.createElement('a');
-            link.className = 'dropdown-item';
-            link.href = `shop.html?maincatname=${encodeURIComponent(cat.maincatname)}`;
+            link.className = list.classList.contains('mobile-maincat-dropdown-list') ? 'nav-link' : 'dropdown-item';
+            link.href = `Shop.html?maincatname=${encodeURIComponent(cat.maincatname)}`;
             link.textContent = cat.maincatname;
             list.appendChild(link);
         });
@@ -268,7 +268,7 @@ function redirectToShopSearch(searchText) {
     if (!searchText || !searchText.trim()) return;
     const query = new URLSearchParams();
     query.set('booktitle', searchText.trim());
-    window.location.href = 'shop.html?' + query.toString();
+    window.location.href = 'Shop.html?' + query.toString();
 }
 
 function setupEnquiryForm() {
@@ -328,10 +328,10 @@ function setupEnquiryForm() {
 document.addEventListener('DOMContentLoaded', () => {
     loadHeaderCategories();
 
-    const searchInputs = document.querySelectorAll('.top-navbar-1 input[type="search"]');
+    const searchInputs = document.querySelectorAll('.top-navbar-1 input[type="search"], #sidebar-section .search input');
     searchInputs.forEach(input => {
-        const parent = input.closest('.overlay-1');
-        const searchButton = parent ? parent.querySelector('a') : null;
+        const parent = input.closest('.overlay-1') || input.closest('.form-group');
+        const searchButton = parent ? parent.querySelector('a, .fa-search') : null;
         if (searchButton) {
             searchButton.addEventListener('click', event => {
                 event.preventDefault();

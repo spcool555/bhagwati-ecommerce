@@ -511,6 +511,25 @@ navbar-section .dropdown-1 ul li a {
     border-bottom: 1px solid #f1f1f1;
 }
 
+#sidebar-section .mobile-maincat-dropdown-list .nav-link {
+    padding-left: 12px;
+    font-size: 14px;
+}
+
+#sidebar-section .mobile-navbar-offer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 0;
+    color: #818181;
+    font-size: 15px;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+#sidebar-section .mobile-navbar-offer b {
+    color: #E84F69;
+}
+
 #sidebar-section .sidenav .fa-angle-right {
     font-size: 15px;
 }
@@ -1390,16 +1409,33 @@ navbar-section .dropdown-1 ul li a {
 
 /* conatact-start */
 
+#contact-section {
+    padding: 40px 0;
+}
+
+#contact-section .breadcrumb {
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+
 #contact-section .box {
     border: 1px solid #cccccc;
     width: 100%;
     height: auto;
     padding: 20px;
+    overflow-wrap: anywhere;
+}
+
+#contact-section .box h1 {
+    color: #01213A;
+    font-size: 34px;
+    line-height: 1.25;
+    font-weight: 700;
 }
 
 #contact-section .box h2 {
     color: #01213A;
-    margin-top: 20px;
+    margin-top: 0;
     font-weight: 600;
 }
 
@@ -1436,9 +1472,51 @@ navbar-section .dropdown-1 ul li a {
 
 #contact-section .box button {
     background-color: #E84F69;
-    margin-top: 20px;
     border: 1px solid #E84F69;
     border-radius: 0%;
+}
+
+#contact-section iframe {
+    display: block;
+    max-width: 100%;
+}
+
+@media only screen and (max-width: 767px) {
+    #contact-section {
+        padding: 24px 0;
+    }
+
+    #contact-section .row.mb-5 {
+        margin-bottom: 24px !important;
+    }
+
+    #contact-section .box,
+    #contact-section .box.p-4,
+    #contact-section .box.p-5 {
+        padding: 18px !important;
+    }
+
+    #contact-section .box h1 {
+        font-size: 24px;
+    }
+
+    #contact-section .box h2 {
+        font-size: 22px;
+    }
+
+    #contact-section .box p,
+    #contact-section .box a {
+        font-size: 14px;
+    }
+
+    #contact-section .box button {
+        width: 100%;
+        padding: 12px 16px !important;
+    }
+
+    #contact-section iframe {
+        height: 300px;
+    }
 }
 
 
