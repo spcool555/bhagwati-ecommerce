@@ -7,7 +7,7 @@
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6-F7DF1E)
 ![jQuery](https://img.shields.io/badge/jQuery-3-0769AD)
 
-Welcome to the Stationary Shop web design project! This project was meticulously crafted by Coderom to provide a seamless user experience, utilizing HTML, CSS3, Bootstrap 4, JavaScript, and jQuery. It's fully responsive and ready to shine on all devices. My main goal is ensuring a fully responsive, user-friendly, and visually appealing experience. Explore the world of life insurance services and products with our modern and interactive website. 🚀
+Welcome to the Bhagwati cards and papers ! This project was meticulously crafted by Coderom to provide a seamless user experience, utilizing HTML, CSS3, Bootstrap 4, JavaScript, and jQuery. It's fully responsive and ready to shine on all devices. My main goal is ensuring a fully responsive, user-friendly, and visually appealing experience. Explore the world of life insurance services and products with our modern and interactive website. 🚀
 
 ## Project Overview 🚀
 
@@ -53,16 +53,9 @@ Stationary Shopy-web-project/
 
 To explore our Stationary Shopy web design project, simply open the `index.html` file in your web browser. You can host it on any web server or dive into the code to learn more.
 
-## Usage 🛠️
 
-Feel free to use this project as a template for your web design endeavors or as a reference for implementing responsive design and interactive features.
 
-## License 📜
 
-This project is licensed under the MIT License. For the complete license details, check the [LICENSE](LICENSE) file.
 
-## Contact 📧
-
-If you have questions or feedback about this project, reach out to Coderom via email at mail.coderom@gmail.com or visit our [Coderom website](https://coderom.databoltahai.in/) for more information.
 
 Thank you for choosing the Stationary Shopy web design project! May it inspire and guide your web design endeavors. 🌟
