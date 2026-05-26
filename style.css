@@ -2387,8 +2387,75 @@ img {
 }
 
 #enquiryModal .modal-body {
-    max-height: calc(80vh - 140px);
+    max-height: calc(80vh - 170px);
     overflow-y: auto;
+    padding-bottom: 1rem;
+}
+
+#enquiryModal .modal-body .form-group {
+    margin-bottom: 1rem;
+}
+
+#enquiryModal .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    background: #fff;
+    border-top: 1px solid #dee2e6;
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    padding: 1rem;
+}
+
+#enquiryModal .modal-footer .btn,
+#enquiryModal .modal-footer .round-black-btn {
+    min-width: 120px;
+    border: none;
+}
+
+#enquiryModal .modal-footer .round-black-btn {
+    background: #01213a;
+    color: #fff;
+}
+
+#enquiryModal .modal-footer .round-black-btn:hover,
+#enquiryModal .modal-footer .round-black-btn:focus {
+    background: #E84F69;
+    color: #fff;
+}
+
+@media screen and (max-width: 576px) {
+    #enquiryModal .modal-dialog {
+        max-width: 95%;
+        margin: 1rem auto;
+    }
+
+    #enquiryModal .modal-content {
+        max-height: 95vh;
+    }
+
+    #enquiryModal .modal-body {
+        max-height: calc(95vh - 140px);
+        padding: 1rem;
+    }
+
+    #enquiryModal .modal-header,
+    #enquiryModal .modal-footer {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    #enquiryModal .modal-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #enquiryModal .modal-footer .btn,
+    #enquiryModal .modal-footer .round-black-btn {
+        width: 100%;
+    }
 }
 
 .preview-thumbnail.nav-tabs {
