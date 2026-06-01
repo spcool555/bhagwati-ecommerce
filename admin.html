@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,14 +6,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bhagwati Admin Panel</title>
 
-    <script>
-        if (sessionStorage.getItem('bhagwatiAdminAuthenticated') !== 'true') {
-            window.location.replace('login.html');
-        }
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut, updatePassword } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCKvdzwTDuAhwx5GVD2k4s_gunEyS_Tlfk",
+            authDomain: "gwati-7fb19.firebaseapp.com",
+            projectId: "gwati-7fb19",
+            storageBucket: "gwati-7fb19.firebasestorage.app",
+            messagingSenderId: "478302101679",
+            appId: "1:478302101679:web:4cc1b8df230ea833d3345a",
+            measurementId: "G-6VC4T69W72"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Track security state globally
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.replace('login.html');
+            }
+        });
+
+        // Expose global sign-out action
+        window.logoutAdmin = function() {
+            signOut(auth).then(() => {
+                window.location.replace('login.html');
+            }).catch((error) => {
+                console.error("Logout Error: ", error);
+            });
+        };
+
+        // Expose secure Firebase password update logic
+        window.updateAdminPassword = function(newPassword) {
+            const user = auth.currentUser;
+            if (user) {
+                return updatePassword(user, newPassword);
+            } else {
+                return Promise.reject(new Error("No authenticated admin user found."));
+            }
+        };
     </script>
 
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
     <style>
         * {
@@ -30,7 +66,6 @@
         }
 
         /* Sidebar */
-
         .sidebar {
             width: 260px;
             height: 100vh;
@@ -67,6 +102,7 @@
             padding: 14px;
             border-radius: 10px;
             transition: 0.3s;
+            cursor: pointer;
         }
 
         .menu li a:hover {
@@ -116,7 +152,6 @@
         }
 
         /* Main */
-
         .main {
             margin-left: 260px;
             width: calc(100% - 260px);
@@ -124,7 +159,6 @@
         }
 
         /* Topbar */
-
         .topbar {
             background: white;
             padding: 18px 25px;
@@ -166,7 +200,6 @@
         }
 
         /* Cards */
-
         .cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -193,7 +226,6 @@
         }
 
         /* Sections */
-
         .section {
             background: white;
             padding: 25px;
@@ -208,7 +240,6 @@
         }
 
         /* Form */
-
         .form-group {
             margin-bottom: 18px;
         }
@@ -249,7 +280,6 @@
         }
 
         /* Table */
-
         table {
             width: 100%;
             border-collapse: collapse;
@@ -282,10 +312,78 @@
             background: #ef4444;
         }
 
+        /* Settings Modal Overlay Style */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .settings-modal {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 400px;
+            max-width: 90%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .settings-modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+        }
+
+        .modal-header h2 {
+            font-size: 20px;
+            color: #111827;
+        }
+
+        .close-modal-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #6b7280;
+            cursor: pointer;
+        }
+
+        .close-modal-btn:hover {
+            color: #111827;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
         /* Mobile */
-
         @media(max-width:768px) {
-
             body {
                 flex-direction: column;
             }
@@ -310,264 +408,119 @@
 
 <body>
 
-    <!-- Sidebar -->
-
     <div class="sidebar">
-
-        <div class="logo">
-            Bhagwati Admin
-        </div>
-
+        <div class="logo">Bhagwati Admin</div>
         <ul class="menu">
-
-            <li>
-                <a href="#">
-                    <i class="fa fa-home"></i>
-                    Dashboard
-                </a>
-            </li>
-
-            <li>
-                <a href="#category">
-                    <i class="fa fa-list"></i>
-                    Add Category
-                </a>
-            </li>
-
-            <li>
-                <a href="#subcategory">
-                    <i class="fa fa-layer-group"></i>
-                    Add Sub Category
-                </a>
-            </li>
-
-            <li>
-                <a href="#product">
-                    <i class="fa fa-box"></i>
-                    Add Product
-                </a>
-            </li>
-
-            <li>
-                <a href="#">
-                    <i class="fa fa-shopping-cart"></i>
-                    Orders
-                </a>
-            </li>
-
-            <li>
-                <a href="#">
-                    <i class="fa fa-users"></i>
-                    Customers
-                </a>
-            </li>
-
-            <li>
-                <a href="#">
-                    <i class="fa fa-cog"></i>
-                    Settings
-                </a>
-            </li>
-
+            <li><a href="#"><i class="fa fa-home"></i> Dashboard</a></li>
+            <li><a href="#category"><i class="fa fa-list"></i> Add Category</a></li>
+            <li><a href="#subcategory"><i class="fa fa-layer-group"></i> Add Sub Category</a></li>
+            <li><a href="#product"><i class="fa fa-box"></i> Add Product</a></li>
+     
+            <li><a id="settingsSidebarLink"><i class="fa fa-cog"></i>Change Password</a></li>
         </ul>
-
     </div>
-
-    <!-- Main -->
 
     <div class="main">
 
-        <!-- Topbar -->
-
         <div class="topbar">
             <h2>Dashboard</h2>
-
             <div class="admin-actions">
-                <div class="admin">
-                    Welcome Admin
-                </div>
-
-                <button type="button" class="logout-btn" id="logoutButton">
-                    <i class="fa fa-sign-out-alt"></i>
-                    Logout
+                <div class="admin">Welcome Admin</div>
+                <button type="button" class="logout-btn" onclick="window.logoutAdmin()">
+                    <i class="fa fa-sign-out-alt"></i> Logout
                 </button>
             </div>
         </div>
 
-        <!-- Dashboard Cards -->
-
         <div class="cards">
-
             <div class="card">
                 <h3>Total Products</h3>
                 <h1>120</h1>
             </div>
-
             <div class="card">
                 <h3>Total Categories</h3>
                 <h1>15</h1>
             </div>
-
             <div class="card">
                 <h3>Total Orders</h3>
                 <h1>45</h1>
             </div>
-
             <div class="card">
                 <h3>Total Customers</h3>
                 <h1>220</h1>
             </div>
-
         </div>
-
-        <!-- Add Category -->
 
         <div class="section" id="category">
-
             <h2>Add Category</h2>
-
             <form id="categoryForm">
-
                 <div class="form-group">
                     <label>Category Name</label>
-
-                    <input type="text"
-                        id="categoryName"
-                        placeholder="Enter Category Name" />
+                    <input type="text" id="categoryName" placeholder="Enter Category Name" />
                 </div>
-
-                <button type="submit" class="btn">
-                    Add Category
-                </button>
-
+                <button type="submit" class="btn">Add Category</button>
             </form>
-
         </div>
 
-        <!-- Add Sub Category -->
-
         <div class="section" id="subcategory">
-
             <h2>Add Sub Category</h2>
-
             <form id="subcategoryForm">
-
                 <div class="form-group">
-
                     <label>Select Category</label>
-
                     <select id="subcategoryCategory">
                         <option>Loading Categories...</option>
                     </select>
-
                 </div>
-
                 <div class="form-group">
-
                     <label>Sub Category Name</label>
-
-                    <input type="text"
-                        id="subcategoryName"
-                        placeholder="Enter Sub Category Name" />
-
+                    <input type="text" id="subcategoryName" placeholder="Enter Sub Category Name" />
                 </div>
-
-                <button type="submit" class="btn">
-                    Add Sub Category
-                </button>
-
+                <button type="submit" class="btn">Add Sub Category</button>
             </form>
-
         </div>
 
-        <!-- Add Product -->
-
         <div class="section" id="product">
-
             <h2>Add Product</h2>
-
             <form id="productForm">
-
                 <div class="form-group">
-
                     <label>Product Name</label>
-
-                    <input type="text"
-                        id="productName"
-                        placeholder="Enter Product Name" />
-
+                    <input type="text" id="productName" placeholder="Enter Product Name" />
                 </div>
-
                 <div class="form-group">
-
                     <label>Select Category</label>
-
                     <select id="productCategory">
                         <option>Loading Categories...</option>
                     </select>
-
                 </div>
-
                 <div class="form-group">
-
                     <label>Select Sub Category</label>
-
                     <select id="productSubCategory">
                         <option>Select Sub Category</option>
                     </select>
-
                 </div>
-
                 <div class="form-group">
-
                     <label>Price</label>
-
-                    <input type="number"
-                        id="productPrice"
-                        placeholder="Enter Product Price" />
-
+                    <input type="number" id="productPrice" placeholder="Enter Product Price" />
                 </div>
-
                 <div class="form-group">
-
                     <label>Upload Product Image</label>
-
-                    <input type="file"
-                        id="productImage" />
-
+                    <input type="file" id="productImage" />
                 </div>
-
                 <div class="form-group">
-
                     <label>Description</label>
-
-                    <textarea rows="5"
-                        id="productDescription"
-                        placeholder="Enter Product Description"></textarea>
-
+                    <textarea rows="5" id="productDescription" placeholder="Enter Product Description"></textarea>
                 </div>
-
-                <button type="submit" class="btn">
-                    Add Product
-                </button>
+                <button type="submit" class="btn">Add Product</button>
                 <button type="button" class="btn" id="cancelEditButton" style="background:#6b7280; display:none; margin-left:12px;">
                     Cancel Edit
                 </button>
-
             </form>
-
         </div>
 
-        <!-- Product List -->
-
         <div class="section">
-
             <h2>Product List</h2>
-
             <table>
-
                 <thead>
-
                     <tr>
                         <th>ID</th>
                         <th>Product</th>
@@ -576,232 +529,232 @@
                         <th>Price</th>
                         <th>Action</th>
                     </tr>
-
                 </thead>
-
                 <tbody id="productTableBody">
-
-                 <tr id="">
-
-                 </tr>
-
+                    <tr></tr>
                 </tbody>
-
             </table>
-
         </div>
-
     </div>
 
-<script>
-    const logoutButton = document.getElementById('logoutButton');
+    <div class="modal-overlay" id="settingsModalOverlay">
+        <div class="settings-modal">
+            <div class="modal-header">
+                <h2>Account Settings</h2>
+                <button type="button" class="close-modal-btn" id="closeSettingsModalBtn">&times;</button>
+            </div>
+            <form id="passwordUpdateForm">
+                <div class="form-group">
+                    <label for="newAdminPassword">New Password</label>
+                    <input type="password" id="newAdminPassword" placeholder="Enter new password" minlength="6" required />
+                </div>
+                <div class="form-group">
+                    <label for="confirmAdminPassword">Confirm New Password</label>
+                    <input type="password" id="confirmAdminPassword" placeholder="Confirm new password" minlength="6" required />
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn" id="cancelSettingsBtn" style="background:#6b7280;">Cancel</button>
+                    <button type="submit" class="btn">Update Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    if (logoutButton) {
-        logoutButton.addEventListener('click', function () {
-            sessionStorage.removeItem('bhagwatiAdminAuthenticated');
-            window.location.href = 'login.html';
+    <script>
+        // ===================================
+        // SETTINGS MODAL INTERACTION LOGIC
+        // ===================================
+        const settingsSidebarLink = document.getElementById('settingsSidebarLink');
+        const settingsModalOverlay = document.getElementById('settingsModalOverlay');
+        const closeSettingsModalBtn = document.getElementById('closeSettingsModalBtn');
+        const cancelSettingsBtn = document.getElementById('cancelSettingsBtn');
+        const passwordUpdateForm = document.getElementById('passwordUpdateForm');
+
+        function openSettingsModal() {
+            settingsModalOverlay.classList.add('active');
+        }
+
+        function closeSettingsModal() {
+            settingsModalOverlay.classList.remove('active');
+            passwordUpdateForm.reset();
+        }
+
+        settingsSidebarLink.addEventListener('click', openSettingsModal);
+        closeSettingsModalBtn.addEventListener('click', closeSettingsModal);
+        cancelSettingsBtn.addEventListener('click', closeSettingsModal);
+
+        // Close modal when hitting backdrop outside container box
+        settingsModalOverlay.addEventListener('click', function(e) {
+            if (e.target === settingsModalOverlay) {
+                closeSettingsModal();
+            }
         });
-    }
 
-    // =========================
-    // LOAD CATEGORIES
-    // =========================
+        passwordUpdateForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const newPassword = document.getElementById('newAdminPassword').value;
+            const confirmPassword = document.getElementById('confirmAdminPassword').value;
 
-    async function loadCategories() {
-
-        try {
-
-            const response =
-                await fetch('https://bhagwaticardsandpapers.com/api/public/allCategories');
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch categories');
+            if (newPassword !== confirmPassword) {
+                alert("Passwords do not match! Please check and try again.");
+                return;
             }
 
-            const data = await response.json();
+            try {
+                // Execute programmatic Firebase update handling
+                await window.updateAdminPassword(newPassword);
+                alert("Admin password updated successfully.");
+                closeSettingsModal();
+            } catch (error) {
+                console.error("Password Update Error:", error);
+                
+                // Security rule handling: Firebase demands a fresh login if the user has been signed in for a long time
+                if (error.code === 'auth/requires-recent-login') {
+                    alert("Security Check: This operation requires a recent login session. You will be redirected to re-authenticate.");
+                    window.logoutAdmin();
+                } else {
+                    alert("Failed to change password: " + error.message);
+                }
+            }
+        });
 
-            console.log("Categories:", data);
+        // =========================
+        // LOAD CATEGORIES
+        // =========================
+        async function loadCategories() {
+            try {
+                const response = await fetch('https://bhagwaticardsandpapers.com/api/public/allCategories');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch categories');
+                }
+                const data = await response.json();
+                console.log("Categories:", data);
 
-            const subcategoryCategory =
-                document.getElementById('subcategoryCategory');
+                const subcategoryCategory = document.getElementById('subcategoryCategory');
+                const productCategory = document.getElementById('productCategory');
 
-            const productCategory =
-                document.getElementById('productCategory');
+                subcategoryCategory.innerHTML = '<option value="">Select Category</option>';
+                productCategory.innerHTML = '<option value="">Select Category</option>';
 
-            subcategoryCategory.innerHTML =
-                '<option value="">Select Category</option>';
+                data.forEach(category => {
+                    const option1 = document.createElement('option');
+                    option1.value = category.id;
+                    option1.textContent = category.maincatname;
+                    subcategoryCategory.appendChild(option1);
 
-            productCategory.innerHTML =
-                '<option value="">Select Category</option>';
-
-            data.forEach(category => {
-
-                // Subcategory Dropdown
-
-                const option1 =
-                    document.createElement('option');
-
-                option1.value = category.id;
-                option1.textContent = category.maincatname;
-
-                subcategoryCategory.appendChild(option1);
-
-                // Product Dropdown
-
-                const option2 =
-                    document.createElement('option');
-
-                option2.value = category.id;
-                option2.textContent = category.maincatname;
-
-                productCategory.appendChild(option2);
-
-            });
-
+                    const option2 = document.createElement('option');
+                    option2.value = category.id;
+                    option2.textContent = category.maincatname;
+                    productCategory.appendChild(option2);
+                });
+            } catch (error) {
+                console.error('Category Load Error:', error);
+            }
         }
 
-        catch (error) {
+        // =========================
+        // LOAD SUB CATEGORIES
+        // =========================
+        async function loadSubCategories(mainCategory) {
+            const productSubCategory = document.getElementById('productSubCategory');
+            if (!productSubCategory) return;
 
-            console.error('Category Load Error:', error);
+            if (!mainCategory) {
+                productSubCategory.innerHTML = '<option value="">Select Category First</option>';
+                return;
+            }
 
-        }
-
-    }
-
-    // =========================
-    // LOAD SUB CATEGORIES
-    // =========================
-
-    async function loadSubCategories(mainCategory) {
-
-        const productSubCategory =
-            document.getElementById('productSubCategory');
-
-        if (!productSubCategory) return;
-
-        if (!mainCategory) {
-
-            productSubCategory.innerHTML =
-                '<option value="">Select Category First</option>';
-
-            return;
-
-        }
-
-        try {
-
-            const response =
-                await fetch(
+            try {
+                const response = await fetch(
                     `https://bhagwaticardsandpapers.com/api/public/allsubcatname?mainc=${encodeURIComponent(mainCategory)}`
                 );
+                if (!response.ok) {
+                    throw new Error('Failed to fetch sub categories');
+                }
+                const data = await response.json();
+                console.log("Sub Categories:", data);
 
-            if (!response.ok) {
-                throw new Error('Failed to fetch sub categories');
+                productSubCategory.innerHTML = '<option value="">Select Sub Category</option>';
+                data.forEach(subcategory => {
+                    const option = document.createElement('option');
+                    option.value = subcategory.id;
+                    option.textContent = subcategory.subcatname;
+                    productSubCategory.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Subcategory Error:', error);
+                productSubCategory.innerHTML = '<option value="">No subcategories available</option>';
             }
-
-            const data = await response.json();
-
-            console.log("Sub Categories:", data);
-
-            productSubCategory.innerHTML =
-                '<option value="">Select Sub Category</option>';
-
-            data.forEach(subcategory => {
-
-                const option =
-                    document.createElement('option');
-
-                option.value = subcategory.id;
-                option.textContent = subcategory.subcatname;
-
-                productSubCategory.appendChild(option);
-
-            });
-
         }
 
-        catch (error) {
+        let selectedProductId = null;
+        let isEditMode = false;
 
-            console.error('Subcategory Error:', error);
-
-            productSubCategory.innerHTML =
-                '<option value="">No subcategories available</option>';
-
+        function resetProductForm() {
+            selectedProductId = null;
+            isEditMode = false;
+            document.getElementById('productForm').reset();
+            document.getElementById('productCategory').selectedIndex = 0;
+            document.getElementById('productSubCategory').innerHTML = '<option value="">Select Sub Category</option>';
+            document.querySelector('#productForm button[type="submit"]').textContent = 'Add Product';
+            document.getElementById('cancelEditButton').style.display = 'none';
         }
 
-    }
-
-let selectedProductId = null;
-let isEditMode = false;
-
-function resetProductForm() {
-    selectedProductId = null;
-    isEditMode = false;
-    document.getElementById('productForm').reset();
-    document.getElementById('productCategory').selectedIndex = 0;
-    document.getElementById('productSubCategory').innerHTML = '<option value="">Select Sub Category</option>';
-    document.querySelector('#productForm button[type="submit"]').textContent = 'Add Product';
-    document.getElementById('cancelEditButton').style.display = 'none';
-}
-
-async function prepareProductEdit(product) {
-    selectedProductId = product.id;
-    isEditMode = true;
-    document.getElementById('productName').value = product.booktitle || '';
-    const categorySelect = document.getElementById('productCategory');
-    for (const option of categorySelect.options) {
-        if (option.text === product.maincatname) {
-            option.selected = true;
-            break;
+        async function prepareProductEdit(product) {
+            selectedProductId = product.id;
+            isEditMode = true;
+            document.getElementById('productName').value = product.booktitle || '';
+            const categorySelect = document.getElementById('productCategory');
+            for (const option of categorySelect.options) {
+                if (option.text === product.maincatname) {
+                    option.selected = true;
+                    break;
+                }
+            }
+            await loadSubCategories(product.maincatname);
+            const subCategorySelect = document.getElementById('productSubCategory');
+            for (const option of subCategorySelect.options) {
+                if (option.text === product.subcatname) {
+                    option.selected = true;
+                    break;
+                }
+            }
+            document.getElementById('productPrice').value = product.originalprice || '';
+            document.getElementById('productDescription').value = product.description || '';
+            document.querySelector('#productForm button[type="submit"]').textContent = 'Update Product';
+            document.getElementById('cancelEditButton').style.display = 'inline-block';
         }
-    }
-    await loadSubCategories(product.maincatname);
-    const subCategorySelect = document.getElementById('productSubCategory');
-    for (const option of subCategorySelect.options) {
-        if (option.text === product.subcatname) {
-            option.selected = true;
-            break;
+
+        async function loadProducts() {
+            fetch('https://bhagwaticardsandpapers.com/api/public/getallbookbycatname')
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Products:", data);
+                    const productTableBody = document.getElementById('productTableBody');
+                    productTableBody.innerHTML = '';
+                    data.forEach(product => {
+                        const row = document.createElement('tr');
+                        row.dataset.description = product.description || '';
+                        row.innerHTML = `
+                            <td>${product.id}</td>
+                            <td>${product.booktitle}</td>
+                            <td>${product.maincatname}</td>
+                            <td>${product.subcatname}</td>
+                            <td>${product.originalprice}</td>
+                            <td>
+                                <button class="action-btn edit" data-id="${product.id}">Edit</button>
+                                <button class="action-btn delete" data-id="${product.id}">Delete</button>
+                            </td>
+                        `;
+                        productTableBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Product Load Error:', error);
+                });
         }
-    }
-    document.getElementById('productPrice').value = product.originalprice || '';
-    document.getElementById('productDescription').value = product.description || '';
-    document.querySelector('#productForm button[type="submit"]').textContent = 'Update Product';
-    document.getElementById('cancelEditButton').style.display = 'inline-block';
-}
 
-async function loadProducts() {
-    fetch('https://bhagwaticardsandpapers.com/api/public/getallbookbycatname')
-        .then(response => response.json())
-        .then(data => {
-            console.log("Products:", data);
-            const productTableBody = document.getElementById('productTableBody');
-            productTableBody.innerHTML = '';
-            data.forEach(product => {
-                const row = document.createElement('tr');
-                row.dataset.description = product.description || '';
-                row.innerHTML = `
-                    <td>${product.id}</td>
-                    <td>${product.booktitle}</td>
-                    <td>${product.maincatname}</td>
-                    <td>${product.subcatname}</td>
-                    <td>${product.originalprice}</td>
-                    <td>
-                        <button class="action-btn edit" data-id="${product.id}">Edit</button>
-                        <button class="action-btn delete" data-id="${product.id}">Delete</button>
-                    </td>
-                `;
-                productTableBody.appendChild(row);
-            });
-        })
-        .catch(error => {
-            console.error('Product Load Error:', error);
-        });
-
-}
-
-
-    document.getElementById('productTableBody')
-        .addEventListener('click', async function (event) {
+        document.getElementById('productTableBody').addEventListener('click', async function (event) {
             const editBtn = event.target.closest('button.edit');
             const deleteBtn = event.target.closest('button.delete');
             if (editBtn) {
@@ -839,232 +792,99 @@ async function loadProducts() {
             }
         });
 
-    // =========================
-    // INITIAL LOAD
-    // =========================
+        loadCategories();
+        loadProducts();
 
-    loadCategories();
-    loadProducts();
-
-    // =========================
-    // CATEGORY CHANGE
-    // =========================
-
-    document.getElementById('productCategory')
-        .addEventListener('change', function () {
-
-            const selectedOption =
-                this.options[this.selectedIndex];
-
-            const mainCategory =
-                selectedOption.text;
-
+        document.getElementById('productCategory').addEventListener('change', function () {
+            const selectedOption = this.options[this.selectedIndex];
+            const mainCategory = selectedOption.text;
             loadSubCategories(mainCategory);
-
         });
 
-    // =========================
-    // ADD CATEGORY
-    // =========================
-
-    document.getElementById('categoryForm')
-        .addEventListener('submit', async function (e) {
-
+        document.getElementById('categoryForm').addEventListener('submit', async function (e) {
             e.preventDefault();
-
-            const categoryName =
-                document.getElementById('categoryName').value;
-
+            const categoryName = document.getElementById('categoryName').value;
             if (!categoryName) {
-
                 alert("Please Enter Category Name");
                 return;
-
             }
-
             try {
-
-                const response = await fetch(
-                    'https://bhagwaticardsandpapers.com/api/public/saveCategories',
-                    {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            maincatname: categoryName
-                        })
-                    }
-                );
-
+                const response = await fetch('https://bhagwaticardsandpapers.com/api/public/saveCategories', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ maincatname: categoryName })
+                });
                 if (response.ok) {
-
                     alert("Category Added Successfully");
-
                     document.getElementById('categoryForm').reset();
-
                     loadCategories();
-
                 } else {
-
                     alert("Failed To Add Category");
-
                 }
-
-            }
-
-            catch (error) {
-
+            } catch (error) {
                 console.error('Category Save Error:', error);
-
             }
-
         });
 
-    // =========================
-    // ADD SUB CATEGORY
-    // =========================
-
-    document.getElementById('subcategoryForm')
-        .addEventListener('submit', async function (e) {
-
+        document.getElementById('subcategoryForm').addEventListener('submit', async function (e) {
             e.preventDefault();
-
-            const categorySelect =
-                document.getElementById('subcategoryCategory');
-
-            const selectedOption =
-                categorySelect.options[categorySelect.selectedIndex];
-
-            const mainCategory =
-                selectedOption.text;
-
-            const subcategoryName =
-                document.getElementById('subcategoryName').value;
+            const categorySelect = document.getElementById('subcategoryCategory');
+            const selectedOption = categorySelect.options[categorySelect.selectedIndex];
+            const mainCategory = selectedOption.text;
+            const subcategoryName = document.getElementById('subcategoryName').value;
 
             if (!mainCategory || !subcategoryName) {
-
                 alert("Please Fill All Fields");
                 return;
-
             }
 
             try {
-
-                const response = await fetch(
-                    'https://bhagwaticardsandpapers.com/api/public/saveSubCategories',
-                    {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            maincatname: mainCategory,
-                            subcatname: subcategoryName
-                        })
-                    }
-                );
-
+                const response = await fetch('https://bhagwaticardsandpapers.com/api/public/saveSubCategories', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ maincatname: mainCategory, subcatname: subcategoryName })
+                });
                 if (response.ok) {
-
                     alert("Sub Category Added Successfully");
-
                     document.getElementById('subcategoryForm').reset();
-
-                }
-
-                else {
-
+                } else {
                     alert("Failed To Add Sub Category");
-
                 }
-
-            }
-
-            catch (error) {
-
+            } catch (error) {
                 console.error('Sub Category Error:', error);
-
             }
-
         });
 
-    // =========================
-    // ADD PRODUCT
-    // =========================
-
-    document.getElementById('productForm')
-        .addEventListener('submit', async function (e) {
-
+        document.getElementById('productForm').addEventListener('submit', async function (e) {
             e.preventDefault();
+            const productName = document.getElementById('productName').value;
+            const categorySelect = document.getElementById('productCategory');
+            const subCategorySelect = document.getElementById('productSubCategory');
+            const productPrice = document.getElementById('productPrice').value;
+            const productDescription = document.getElementById('productDescription').value;
+            const productImage = document.getElementById('productImage');
 
-            const productName =
-                document.getElementById('productName').value;
+            const categoryOption = categorySelect.options[categorySelect.selectedIndex];
+            const subCategoryOption = subCategorySelect.options[subCategorySelect.selectedIndex];
 
-            const categorySelect =
-                document.getElementById('productCategory');
+            const mainCategory = categoryOption.text;
+            const subCategory = subCategoryOption.text;
 
-            const subCategorySelect =
-                document.getElementById('productSubCategory');
-
-            const productPrice =
-                document.getElementById('productPrice').value;
-
-            const productDescription =
-                document.getElementById('productDescription').value;
-
-            const productImage =
-                document.getElementById('productImage');
-
-            const categoryOption =
-                categorySelect.options[categorySelect.selectedIndex];
-
-            const subCategoryOption =
-                subCategorySelect.options[subCategorySelect.selectedIndex];
-
-            const mainCategory =
-                categoryOption.text;
-
-            const subCategory =
-                subCategoryOption.text;
-
-            if (
-                !productName ||
-                !mainCategory ||
-                !subCategory ||
-                !productPrice
-            ) {
-
+            if (!productName || !mainCategory || !subCategory || !productPrice) {
                 alert("Please Fill All Required Fields");
                 return;
-
             }
 
             try {
-
                 const formData = new FormData();
-
-                // Product Entity Fields
-
                 formData.append('booktitle', productName);
-
                 formData.append('maincatname', mainCategory);
-
                 formData.append('subcatname', subCategory);
-
                 formData.append('originalprice', productPrice);
-
                 formData.append('description', productDescription);
 
-                // Image
-
                 if (productImage.files.length > 0) {
-
-                    formData.append(
-                        'imageFile',
-                        productImage.files[0]
-                    );
-
+                    formData.append('imageFile', productImage.files[0]);
                 }
 
                 const endpoint = isEditMode && selectedProductId
@@ -1083,50 +903,27 @@ async function loadProducts() {
                 });
 
                 if (response.ok) {
-
-                    const result = await response.text();
-
-                    console.log(result);
-
                     alert(isEditMode ? "Product Updated Successfully" : "Product Added Successfully");
-
                     resetProductForm();
                     loadProducts();
-
-                }
-
-                else {
-
+                } else {
                     alert(isEditMode ? "Failed To Update Product" : "Failed To Add Product");
-
                 }
-
-            }
-
-            catch (error) {
-
+            } catch (error) {
                 console.error('Product Error:', error);
-
-                alert("Error Adding Product");
-
+                alert("Error Managing Product Data");
             }
-
         });
 
-    document.getElementById('cancelEditButton')
-        .addEventListener('click', function () {
+        document.getElementById('cancelEditButton').addEventListener('click', function () {
             resetProductForm();
         });
-
     </script>
 
     <a class="whatsapp-float" href="https://wa.me/918208960864" target="_blank" rel="noopener" aria-label="Chat on WhatsApp at +91 8208960864" title="WhatsApp: +91 8208960864">
         <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
     </a>
 
-
-
 </body>
 
 </html>
-
