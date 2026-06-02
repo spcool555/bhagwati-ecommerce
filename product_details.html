@@ -48,47 +48,52 @@
 
      <!------------------------ second-top-navbar-start---------------------------- -->
 
-      <section class="top-navbar-1 d-none d-lg-block d-sm-block" id="top-navbar-1">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-3 col-8 col-sm-3">
-                        <img src="/images/official-nobg.png" alt="">
+<section class="top-navbar-1 d-none d-lg-block" id="top-navbar-1" style="background-color: #fff; padding: 20px 0; border-bottom: 1px solid #eee;">
+    <div class="container">
+        <div class="row align-items-center">
+            
+            <!-- 1. LOGO COL -->
+            <div class="col-lg-3 col-md-3">
+                <img src="/images/official-nobg.png" alt="Logo" style="max-height: 80px; width: auto; display: block;">
+            </div>
+
+            <!-- 2. WIDER SEARCH BAR -->
+            <div class="col-lg-5 col-md-5"> <!-- Adjusted slightly to 5 to give text more side-room -->
+                <form action="" method="GET" style="width: 100%;">
+                    <div class="input-group" style="position: relative; width: 100%;">
+                        <input type="search" class="form-control" placeholder="Search Products...." aria-label="Search" 
+                            style="border: 2px solid #e0e0e0; border-radius: 30px; padding: 14px 50px 14px 20px; font-size: 16px; width: 100%;">
+                        <span style="position: absolute; right: 22px; top: 50%; transform: translateY(-50%); z-index: 10; pointer-events: none;">
+                            <i class="fa fa-search" style="color: #a0a0a0; font-size: 18px;"></i>
+                        </span>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 3. BRAND SLOGAN COL (With Trendy Icons & Animations) -->
+            <div class="col-lg-4 col-md-4 text-end">
+                <div style="line-height: 1.4; padding: 5px 0;">
+                    
+                    <!-- Animated "Since 1994" + Verified/History Icon -->
+                    <div class="animate-since" style="color: #222; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; font-size: 18px; display: flex; align-items: center; justify-content: flex-end; margin-bottom: 4px;">
+                        <span>Since 1994</span>
+                        <i class="fa fa-check-circle" style="color: #28a745; font-size: 16px; margin-left: 8px;" title="Established & Verified"></i>
+                    </div>
+                    
+                    <!-- Animated Slogan + Pulsing Fire Icon -->
+                    <div class="animate-slogan" style="color: #E84F69; font-weight: 700; font-size: 18px; letter-spacing: 0.5px; white-space: nowrap; display: flex; align-items: center; justify-content: flex-end;">
+                        <span>A Choice Of Young Generation</span>
+                        <span class="trending-fire-icon">
+                            <i class="fa fa-fire" style="color: #E84F69; font-size: 20px;"></i>
+                        </span>
                     </div>
 
-                    <div class="col-lg-3 col-sm-3 col-4 overlay-2 d-lg-none d-block">
-                        <ul>
-                            <li><a href=" "><i class="fa fa-user " aria-hidden="true "></i></a></li>
-                            <li><a href=" "><i class="fa fa-heart-o " aria-hidden="true "></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="col-lg-6 col-12 col-sm-6 mt-2 ">
-                        <div class="row overlay-1">
-                            <div class="col-lg-7  col-6 col-sm-7 ">
-                                <input type="search" class="form-control  " name="" id="" aria-describedby="helpId"
-                                    placeholder="Search Products....">
-                                <span class="wrap"></span>
-                            </div>
-                            <div class="col-lg-4 col-4 col-sm-3 ">
-
-
-                            
-                            </div>
-                            <div class="col-lg-1 col-2 col-sm-2 mt-2 ">
-                                <a href=" ">
-                                    <i class="fa fa-search " style="color: #000;"></i>
-
-                                </a>
-                            </div>
-                        </div>
-
-
-                    </div>
-
-
-                   
                 </div>
             </div>
-        </section>
+            
+        </div>
+    </div>
+</section>
 
     <!------------------------ second-top-navbar-end---------------------------- -->
 
@@ -254,7 +259,7 @@
                         <a href="#"><i class="fa fa-phone"></i>&nbsp;+91 8208960864 </a>
                     </div>
                     <div class="single-mobile-header-info">
-                        <i class="fa fa-clock-o"></i>&nbsp; Monday – Friday: 9:00-9:00 Saturday: Off
+                        <i class="fa fa-clock-o"></i>&nbsp; Monday – Saturday: 11:00-8:00 Sunday: Off
                     </div>
                 </div>
             </div>
