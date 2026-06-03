@@ -18,6 +18,162 @@ a {
     text-decoration: none !important;
 }
 
+.inner-page-hero {
+    background: #f8f9fa;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    padding: 42px 0 58px;
+}
+
+.inner-page-hero .breadcrumb {
+    padding-left: 0;
+    margin-bottom: 28px;
+}
+
+.section-label {
+    color: #E84F69;
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+}
+
+.inner-page-hero h1 {
+    color: #222;
+    font-size: 42px;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 14px;
+}
+
+.inner-page-hero p {
+    color: #5f6670;
+    font-size: 17px;
+    line-height: 1.8;
+    margin-bottom: 0;
+}
+
+.team-hero-logo {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+    display: block;
+    margin-left: auto;
+    padding: 26px;
+    width: min(100%, 360px);
+}
+
+.team-list-section,
+.video-grid-section {
+    padding: 60px 0;
+}
+
+.team-member-card,
+.video-card {
+    background: #fff;
+    border: 1px solid #ececec;
+    border-radius: 8px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+    height: 100%;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.team-member-card {
+    padding: 34px 26px;
+    text-align: center;
+}
+
+.team-member-card:hover,
+.video-card:hover {
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
+    transform: translateY(-5px);
+}
+
+.team-avatar {
+    align-items: center;
+    background: #01213a;
+    border-radius: 50%;
+    color: #fff;
+    display: inline-flex;
+    font-size: 24px;
+    font-weight: 800;
+    height: 86px;
+    justify-content: center;
+    margin-bottom: 22px;
+    width: 86px;
+}
+
+.team-member-card h3,
+.video-card h3 {
+    color: #222;
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.team-member-card p,
+.video-card p {
+    color: #747b84;
+    margin-bottom: 0;
+}
+
+.video-thumb {
+    align-items: center;
+    aspect-ratio: 16 / 10;
+    background-position: center;
+    background-size: cover;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.video-thumb::before {
+    background: rgba(1, 33, 58, 0.42);
+    content: "";
+    inset: 0;
+    position: absolute;
+}
+
+.video-thumb span {
+    align-items: center;
+    background: #E84F69;
+    border-radius: 50%;
+    color: #fff;
+    display: inline-flex;
+    height: 58px;
+    justify-content: center;
+    position: relative;
+    width: 58px;
+    z-index: 1;
+}
+
+.video-card h3 {
+    padding: 22px 22px 0;
+}
+
+.video-card p {
+    padding: 0 22px 24px;
+}
+
+@media (max-width: 767px) {
+    .inner-page-hero {
+        padding: 30px 0 42px;
+    }
+
+    .inner-page-hero h1 {
+        font-size: 32px;
+    }
+
+    .team-hero-logo {
+        margin: 28px auto 0;
+    }
+}
+
 .whatsapp-float {
     position: fixed;
     right: 22px;

@@ -1,4 +1,7 @@
 function updateTimer() {
+    const timerElement = document.getElementById("timer");
+    if (!timerElement) return;
+
     future = Date.parse("Dec 31, 2026  23:59:59");
     now = new Date();
     diff = future - now;
@@ -13,8 +16,7 @@ function updateTimer() {
     m = mins - hours * 60;
     s = secs - mins * 60;
 
-    document.getElementById("timer")
-        .innerHTML =
+    timerElement.innerHTML =
         '<div>' + d + '<span>Days</span></div>' +
         '<div>' + h + '<span>Hours</span></div>' +
         '<div>' + m + '<span>Minutes</span></div>' +
