@@ -1,0 +1,13 @@
+User-agent: *
+
+# Main site sitemap
+Sitemap: https://bhagwaticardsandpapers.com/sitemap.xml
+
+# Allow crawling of public pages
+Allow: /
+
+# Keep these paths out of indexing/crawling
+Disallow: /admin.html
+Disallow: /login.html
+Disallow: /backup/
+
