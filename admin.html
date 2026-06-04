@@ -693,7 +693,7 @@ document.getElementById('productForm').addEventListener('submit', async function
 
         const endpoint = isEditMode && selectedProductId
             ? 'https://bhagwaticardsandpapers.com/api/public/updateBookById'
-            : 'https://bhagwaticardsandpapers.com/api/public/saveproduct';
+            : 'https://bhagwaticardsandpapers.com/api/public/saveproduct/bulk';
         const method = isEditMode && selectedProductId ? 'PUT' : 'POST';
         if (isEditMode && selectedProductId) formData.append('id', selectedProductId);
 
