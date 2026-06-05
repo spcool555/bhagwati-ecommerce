@@ -326,9 +326,192 @@ function setupEnquiryForm() {
     });
 }
 
+// Reviews (temporary placeholder endpoints; replace later)
+const REVIEWS_GET_URL = 'https://bhagwaticardsandpapers.com/api/getallreview';
+const REVIEWS_POST_URL = 'https://bhagwaticardsandpapers.com/api/savereview';
+
+function escapeHtml(unsafe) {
+    return String(unsafe ?? '').replace(/[&<>"']/g, c => ({
+        '&': '&amp;',
+        '<': '<',
+        '>': '>',
+        '"': '"',
+        "'": '&#039;'
+    }[c]));
+}
+
+function renderReviewsCarousel(reviews) {
+    const slider = document.getElementById('reviewsCarousel');
+    const carouselInner = document.querySelector('#reviewsCarousel .carousel-inner');
+
+    const indicators = document.querySelector('#reviewsCarousel .carousel-indicators');
+
+
+    if (!slider || !carouselInner) return;
+
+    if (!Array.isArray(reviews) || reviews.length === 0) {
+        carouselInner.innerHTML = `
+            <div class="carousel-item active">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="reviews-empty">No reviews yet.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        if (indicators) indicators.innerHTML = '';
+        return;
+    }
+
+    // Keep items small: 1 review per slide
+    carouselInner.innerHTML = '';
+    if (indicators) indicators.innerHTML = '';
+
+    reviews.forEach((r, idx) => {
+        const name = escapeHtml(r.name || r.customerName || 'Customer');
+        const review = escapeHtml(r.review || r.message || '');
+        const stars = Number(r.stars ?? r.rating ?? 5);
+        const safeStars = Number.isFinite(stars) ? Math.max(1, Math.min(5, stars)) : 5;
+
+        const starsHtml = Array.from({ length: 5 }, (_, i) => {
+            const active = i < safeStars;
+            return `<i class="fa ${active ? 'fa-star' : 'fa-star-o'}" aria-hidden="true"></i>`;
+        }).join('');
+
+        const item = document.createElement('div');
+        item.className = 'carousel-item' + (idx === 0 ? ' active' : '');
+        item.innerHTML = `
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="review-card">
+                            <div class="review-stars">${starsHtml}</div>
+                            <p class="review-text">${review}</p>
+                            <div class="review-name">- ${name}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        carouselInner.appendChild(item);
+
+        if (indicators) {
+            const li = document.createElement('li');
+            li.setAttribute('data-target', '#reviewsCarousel');
+            li.setAttribute('data-slide-to', String(idx));
+            if (idx === 0) li.className = 'active';
+            indicators.appendChild(li);
+        }
+    });
+}
+
+async function loadReviews() {
+    const slider = document.getElementById('reviewsCarousel');
+    if (!slider) return;
+
+    const carouselInner = document.querySelector('#reviewsCarousel .carousel-inner');
+    if (carouselInner) {
+        carouselInner.innerHTML = `
+            <div class="carousel-item active">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="reviews-loading">Loading reviews...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    try {
+        const res = await fetch(REVIEWS_GET_URL);
+        if (!res.ok) throw new Error('Reviews GET failed');
+        const data = await res.json();
+        // API shape may vary; normalize
+        const reviews = Array.isArray(data) ? data : (data.reviews || data.data || []);
+        renderReviewsCarousel(reviews);
+    } catch (err) {
+        console.error('Reviews load error:', err);
+        renderReviewsCarousel([]);
+    }
+}
+
+function setupReviewForm() {
+    const form = document.getElementById('addReviewForm');
+    if (!form) return;
+
+    const submitBtn = form.querySelector('button[type="submit"], button[type="submit"]');
+
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const name = String(formData.get('name') || '').trim();
+        const stars = Number(formData.get('stars') || formData.get('rating') || 5);
+        const review = String(formData.get('review') || formData.get('message') || '').trim();
+
+        const safeStars = Number.isFinite(stars) ? Math.max(1, Math.min(5, stars)) : 5;
+
+        const errorBox = document.getElementById('reviewFormError');
+        const successBox = document.getElementById('reviewFormSuccess');
+        if (errorBox) errorBox.style.display = 'none';
+        if (successBox) successBox.style.display = 'none';
+
+        if (!name || !review) {
+            if (errorBox) {
+                errorBox.textContent = 'Please enter your name and review.';
+                errorBox.style.display = 'block';
+            }
+            return;
+        }
+
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            const prev = submitBtn.textContent;
+            submitBtn.textContent = 'Submitting...';
+            try {
+                const res = await fetch(REVIEWS_POST_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, star: safeStars, review })
+                });
+
+                if (!res.ok) throw new Error('Review POST failed');
+
+                if (successBox) {
+                    successBox.textContent = 'Thanks! Your review has been submitted.';
+                    successBox.style.display = 'block';
+                }
+
+                form.reset();
+                await loadReviews();
+            } catch (err) {
+                console.error('Review submit error:', err);
+                if (errorBox) {
+                    errorBox.textContent = 'Unable to submit review. Please try again.';
+                    errorBox.style.display = 'block';
+                }
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = prev;
+                }
+            }
+        }
+    });
+}
+
 // Run on load
 document.addEventListener('DOMContentLoaded', () => {
     loadHeaderCategories();
+    loadReviews();
+    setupReviewForm();
+
+
 
     const searchInputs = document.querySelectorAll('.top-navbar-1 input[type="search"], #sidebar-section .search input');
     searchInputs.forEach(input => {
