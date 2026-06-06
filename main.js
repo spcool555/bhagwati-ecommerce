@@ -326,7 +326,7 @@ function setupEnquiryForm() {
     });
 }
 
-// Reviews (temporary placeholder endpoints; replace later)
+// Reviews (temporary placeholder endpoints; replace later)//
 const REVIEWS_GET_URL = 'https://bhagwaticardsandpapers.com/api/public/getallreview';
 const REVIEWS_POST_URL = 'https://bhagwaticardsandpapers.com/api/public/savereview';
 
