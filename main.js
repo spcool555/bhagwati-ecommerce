@@ -327,8 +327,8 @@ function setupEnquiryForm() {
 }
 
 // Reviews (temporary placeholder endpoints; replace later)
-const REVIEWS_GET_URL = 'https://bhagwaticardsandpapers.com/api/getallreview';
-const REVIEWS_POST_URL = 'https://bhagwaticardsandpapers.com/api/savereview';
+const REVIEWS_GET_URL = 'https://bhagwaticardsandpapers.com/api/public/getallreview';
+const REVIEWS_POST_URL = 'https://bhagwaticardsandpapers.com/api/public/savereview';
 
 function escapeHtml(unsafe) {
     return String(unsafe ?? '').replace(/[&<>"']/g, c => ({
